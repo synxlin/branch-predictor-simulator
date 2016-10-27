@@ -9,10 +9,10 @@
 #define GSHARE 1
 #define HYBRID 2
 #define YEH_PATT 3
-#define GHRegister 4
-#define BCTable 5
-#define BHTable 6
-#define BTBuffer 7
+#define BTBuffer 4
+#define GHRegister 5
+#define BCTable 6
+#define BHTable 7
 #define ASSOC 8
 
 #define NOT_BRANCH 0
@@ -61,8 +61,8 @@ typedef struct Result
 {
 	Predictor predict_predictor;
 	Branch_Result predict_branch;
-	Branch_Result predict_taken[4];
-	Taken_Result actual_branch;
+	Taken_Result predict_taken[4];
+	Branch_Result actual_branch;
 	Taken_Result actual_taken;
 }Result;
 
@@ -110,6 +110,6 @@ void Update_Stat(Result result);
 /*
  *	Print the result to file *fp
  */
-uint32_t Result_fprintf(FILE *fp, int argc, char* argv[]);
+void Result_fprintf(FILE *fp, int argc, char* argv[]);
 
 #endif

@@ -67,5 +67,5 @@ void BPT_fprintf(BPT* BranchPredictionTable, FILE *fp)
 {
 	uint64_t i;
 	for (i = 0; i < BranchPredictionTable->attributes.counter_num; i++)
-		fprintf(fp, "table[%lu]: %u\n", i, BranchPredictionTable->counter[i]);
+		fprintf(fp, "table[%llu]: %u\n", i, BranchPredictionTable->counter[i]);
 }

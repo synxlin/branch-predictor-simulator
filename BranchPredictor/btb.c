@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "utils.h"
 #include "btb.h"
@@ -104,8 +105,8 @@ void BTB_Replacement(uint32_t index, uint32_t way_num, uint32_t tag)
 Branch_Result BTB_Predict(uint32_t addr)
 {
 	uint32_t tag, index;
-	Interpret_Address(branch_target_buffer, addr, &tag, &index);
-	uint32_t way_num = BTB_Search(branch_target_buffer, tag, index);
+	Interpret_Address(addr, &tag, &index);
+	uint32_t way_num = BTB_Search(tag, index);
 	if (way_num == branch_target_buffer->attributes.assoc)
 		return not_branch;
 	return branch;
@@ -121,8 +122,8 @@ void BTB_Update(uint32_t addr, Result result, uint64_t rank_value)
 			/* if it is not a branch and predition is correct, we do nothing */
 			return;
 		/* if it is a branch and predition is correct, we update the LRU bit */
-		Interpret_Address(branch_target_buffer, addr, &tag, &index);
-		way_num = BTB_Search(branch_target_buffer, tag, index);
+		Interpret_Address(addr, &tag, &index);
+		way_num = BTB_Search(tag, index);
 	}
 	/* if predition is not correct */
 	else
@@ -133,11 +134,11 @@ void BTB_Update(uint32_t addr, Result result, uint64_t rank_value)
 		 * case where predition is not a branch but it actually is.
 		 * Under this situation, we need to replace block and update LRU bit.
 		 */
-		Interpret_Address(branch_target_buffer, addr, &tag, &index);
-		way_num = Rank_Top(branch_target_buffer, index);
-		BTB_Replacement(branch_target_buffer, index, way_num, tag);
+		Interpret_Address(addr, &tag, &index);
+		way_num = Rank_Top(index);
+		BTB_Replacement(index, way_num, tag);
 	}
-	Rank_Maintain(branch_target_buffer, index, way_num, rank_value);
+	Rank_Maintain(index, way_num, rank_value);
 }
 
 void BTB_fprintf(FILE *fp)
@@ -149,7 +150,7 @@ void BTB_fprintf(FILE *fp)
 		uint32_t j;
 		for (j = 0; j < branch_target_buffer->attributes.assoc; j++)
 		{
-			fprintf(fp, "  {%u, 0x\t\t%x}", branch_target_buffer->set[i].block[j].valid_bit, Rebuild_Address(branch_target_buffer, branch_target_buffer->set[i].block[j].tag, i));
+			fprintf(fp, "  {%u, 0x\t\t%x}", branch_target_buffer->set[i].block[j].valid_bit, Rebuild_Address(branch_target_buffer->set[i].block[j].tag, i));
 		}
 		fprintf(fp, "\n");
 	}

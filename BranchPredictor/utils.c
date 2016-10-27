@@ -101,45 +101,21 @@ void Update_Stat(Result result)
 		stat.misprediction_rate = (double)stat.num_misprediction[5] / (double)stat.num_prediction * 100.0;
 		return;
 	}
-	switch (branch_predictor->predictor_type)
+
+	if (result.actual_taken != result.predict_taken[branch_predictor->predictor_type])
 	{
-	case bimodal:
-	{
-		if (result.actual_taken != result.predict_taken[BIMODAL])
-			stat.num_misprediction[BIMODAL]++;
-		break;
-	}
-	case gshare:
-	{
-		if (result.actual_taken != result.predict_taken[GSHARE])
-			stat.num_misprediction[GSHARE]++;
-		break;
-	}
-	case hybrid:
-	{
-		if (result.actual_taken != result.predict_taken[HYBRID])
-		{
+		stat.num_misprediction[branch_predictor->predictor_type]++;
+		if (branch_predictor->predictor_type == hybrid)
 			stat.num_misprediction[result.predict_predictor]++;
-			stat.num_misprediction[HYBRID]++;
-		}
-		break;
 	}
-	case yeh_patt:
-	{
-		if (result.actual_taken != result.predict_taken[YEH_PATT])
-			stat.num_misprediction[YEH_PATT]++;
-		break;
-	}
-	default:
-		return;
-	}
-	if (result.predict_taken == taken)
+
+	if (result.predict_taken[result.predict_predictor] == taken)
 		stat.num_prediction++;
 	stat.num_misprediction[5] = stat.num_misprediction[branch_predictor->predictor_type] + stat.num_misprediction[BTBuffer];
 	stat.misprediction_rate = (double)stat.num_misprediction[5] / (double)stat.num_prediction * 100.0;
 }
 
-uint32_t Result_fprintf(FILE *fp, int argc, char* argv[])
+void Result_fprintf(FILE *fp, int argc, char* argv[])
 {
 	fprintf(fp, "Command Line:\n");
 	int i;

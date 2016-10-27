@@ -43,7 +43,7 @@ void BCT_Update(BCT* BranchChooserTable, uint32_t addr, Result result)
 	if (result.actual_taken != result.predict_taken[BIMODAL] && result.actual_taken != result.predict_taken[GSHARE])
 		return;
 	uint32_t index = Get_Index(addr, BranchChooserTable->attributes.index_width);
-	if (result.actual_branch == result.predict_taken[GSHARE])
+	if (result.actual_taken == result.predict_taken[GSHARE])
 	{
 		switch (BranchChooserTable->chooser[index])
 		{
