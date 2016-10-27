@@ -40,7 +40,7 @@ uint64_t BHT_Search(BHT *BranchHistoryTable, uint32_t addr)
 /*
  *	Update the BranchPredictionTable
  *	input	:
- *		index	:	index of counter
+ *		addr	:	PC
  *		result	:	struct "Result", the prediction and actual result
  */
 void BHT_Update(BHT *BranchHistoryTable, uint32_t addr, Result result)

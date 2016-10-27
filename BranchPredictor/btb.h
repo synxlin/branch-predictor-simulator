@@ -18,7 +18,8 @@ typedef struct Set
 
 typedef struct BTB_Stat
 {
-	uint64_t num_access;
+	uint64_t num_predictions;
+	uint64_t num_updates;
 	uint64_t num_predict_branch;
 	uint64_t num_mispredict_branch;
 }BTB_Stat;

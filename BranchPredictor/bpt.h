@@ -3,6 +3,11 @@
  */
 #pragma once
 
+#define STRONGLY_TAKEN 3
+#define WEAKLY_TAKEN 2
+#define WEAKLY_NOT_TAKEN 1
+#define STRONGLY_NOT_TAKEN 0
+
 typedef enum Two_Bit_Counter
 {
 	strongly_not_taken = STRONGLY_NOT_TAKEN,
@@ -13,7 +18,8 @@ typedef enum Two_Bit_Counter
 
 typedef struct BPT_Stat
 {
-	uint64_t num_access;
+	uint64_t num_preditions;
+	uint64_t num_updates;
 	uint64_t num_predict_taken;
 	uint64_t num_mispredict_taken;
 }BPT_Stat;

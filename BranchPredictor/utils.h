@@ -1,15 +1,15 @@
 #pragma once
 
+#define BIMODAL 0
+#define GSHARE 1
+#define HYBRID 2
+#define YEH_PATT 3
+
 #define NOT_BRANCH 0
 #define BRANCH 1
 
 #define NOT_TAKEN 0
 #define TAKEN 1
-
-#define STRONGLY_TAKEN 3
-#define WEAKLY_TAKEN 2
-#define WEAKLY_NOT_TAKEN 1
-#define STRONGLY_NOT_TAKEN 0
 
 #define VALID 1
 #define INVALID 0
@@ -39,10 +39,19 @@ typedef enum Taken_Result
 	taken = TAKEN 
 } Taken_Result;
 
+typedef enum Predictor
+{
+	bimodal = BIMODAL,
+	gshare = GSHARE,
+	hybrid = HYBRID,
+	yeh_patt = YEH_PATT
+}Predictor;
+
 typedef struct Result
 {
-	Branch_Result predict_branch;
-	Branch_Result predict_taken;
+	Predictor predict_predictor;
+	Branch_Result predict_branch[4];
+	Branch_Result predict_taken[4];
 	Taken_Result actual_branch;
 	Taken_Result actual_taken;
 }Result;

@@ -62,8 +62,7 @@ uint32_t Rebuild_Address(BTB* BranchTargetBuffer, uint32_t tag, uint32_t index)
 
 /*
  *	Search the BranchTargetBuffer
- *	return the result: HIT or MISS
- *	if HIT, the hit way number will return by input parameter pointer "*way_num"
+ *	return the way_num if HIT, otherwise, return the assoc
  */
 uint32_t BTB_Search(BTB* BranchTargetBuffer, uint64_t tag, uint32_t index)//, uint32_t *way_num)
 {
@@ -145,11 +144,11 @@ Branch_Result BTB_Predict(BTB* BranchTargetBuffer, uint32_t addr)
 	uint32_t tag, index;
 	Interpret_Address(BranchTargetBuffer, addr, &tag, &index);
 	uint32_t way_num = BTB_Search(BranchTargetBuffer, tag, index);
-	BranchTargetBuffer->stat.num_access++;
+	BranchTargetBuffer->stat.num_predictions++;
 	if (way_num == BranchTargetBuffer->attributes.assoc)
-		return NOT_BRANCH;
+		return not_branch;
 	BranchTargetBuffer->stat.num_predict_branch++;
-	return BRANCH;
+	return branch;
 }
 
 /*
@@ -163,9 +162,9 @@ void BTB_Update(BTB* BranchTargetBuffer, uint32_t addr, Result result, uint64_t 
 {
 	uint32_t tag, index, way_num;
 	/* if predition is correct */
-	if (result.actual_branch == result.predict_branch)
+	if (result.actual_branch == result.predict_branch[result.predict_predictor])
 	{
-		if (result.actual_branch == NOT_BRANCH)
+		if (result.actual_branch == not_branch)
 			/* if it is not a branch and predition is correct, we do nothing */
 			return;
 		/* if it is a branch and predition is correct, we update the LRU bit */
@@ -187,4 +186,5 @@ void BTB_Update(BTB* BranchTargetBuffer, uint32_t addr, Result result, uint64_t 
 		BTB_Replacement(BranchTargetBuffer, index, way_num, tag);
 	}
 	Rank_Maintain(BranchTargetBuffer, index, way_num, rank_value);
+	BranchTargetBuffer->stat.num_updates++;
 }
