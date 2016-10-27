@@ -1,9 +1,15 @@
 #pragma once
 
+#define UINT32_MAX 4294967295
+
 #define BIMODAL 0
 #define GSHARE 1
 #define HYBRID 2
 #define YEH_PATT 3
+#define GHRegister 4
+#define BCTable 5
+#define BHTable 6
+#define BTBuffer 7
 
 #define NOT_BRANCH 0
 #define BRANCH 1
@@ -19,7 +25,7 @@
 
 #define _error_exit(fun) { perror(fun); exit(EXIT_FAILURE); }
 
-#define _output_error_exit(fun) { printf(fun); exit(EXIT_FAILURE);}
+#define _output_error_exit(msg) { printf("error: %s", msg); exit(EXIT_FAILURE);}
 
 #define pow_2(num) (1 << ((int)(num)))
 
@@ -50,7 +56,7 @@ typedef enum Predictor
 typedef struct Result
 {
 	Predictor predict_predictor;
-	Branch_Result predict_branch[4];
+	Branch_Result predict_branch;
 	Branch_Result predict_taken[4];
 	Taken_Result actual_branch;
 	Taken_Result actual_taken;

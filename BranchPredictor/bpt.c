@@ -21,7 +21,7 @@ void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width)
 	BranchPredictionTable->counter = (Two_Bit_Counter *)malloc(sizeof(Two_Bit_Counter) * BranchPredictionTable->attributes.counter_num);
 	if (BranchPredictionTable->counter == NULL)
 		_error_exit("malloc")
-	uint32_t i;
+	uint64_t i;
 	for (i = 0; i < BranchPredictionTable->attributes.counter_num; i++)
 		BranchPredictionTable->counter[i] = weakly_taken;
 }
@@ -55,7 +55,7 @@ Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index)
  */
 void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result)
 {
-	if (result.actual_branch != result.predict_branch[result.predict_predictor])
+	if (result.actual_taken != result.predict_taken[result.predict_predictor])
 		BranchPredictionTable->stat.num_mispredict_taken++;
 
 	if (result.actual_taken == taken)
@@ -84,4 +84,11 @@ void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result)
 			return;
 		}
 	}
+}
+
+void BPT_fprintf(BPT* BranchPredictionTable, FILE *fp)
+{
+	uint64_t i;
+	for (i = 0; i < BranchPredictionTable->attributes.counter_num; i++)
+		fprintf(fp, "table[%lu]: %u\n", i, BranchPredictionTable->counter[i]);
 }

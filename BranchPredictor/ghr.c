@@ -15,7 +15,7 @@
 void GHR_Initial(GHR *GlobalBranchHistoryTable, uint32_t history_width)
 {
 	GlobalBranchHistoryTable->attributes.history_width = history_width;
-	GlobalBranchHistoryTable->attributes.history_max = (uint64_t)pow_2(history_width - 1);
+	GlobalBranchHistoryTable->attributes.history_one = (uint32_t)pow_2(history_width - 1);
 	GlobalBranchHistoryTable->history = 0;
 }
 
@@ -26,9 +26,9 @@ void GHR_Initial(GHR *GlobalBranchHistoryTable, uint32_t history_width)
  */
 void GHR_Update(GHR *GlobalBranchHistoryTable, Result result)
 {
-	uint64_t old_history = GlobalBranchHistoryTable->history;
-	old_history = (old_history << 1) & (GlobalBranchHistoryTable->attributes.history_max);
+	uint32_t old_history = GlobalBranchHistoryTable->history;
+	old_history = old_history >> 1;
 	if (result.actual_taken == TAKEN)
-		old_history++;
+		old_history = old_history | GlobalBranchHistoryTable->attributes.history_one;
 	GlobalBranchHistoryTable->history = old_history;
 }

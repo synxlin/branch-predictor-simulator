@@ -42,3 +42,5 @@ void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width);
 Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index);
 
 void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result);
+
+void BPT_fprintf(BPT* BranchPredictionTable, FILE *fp);

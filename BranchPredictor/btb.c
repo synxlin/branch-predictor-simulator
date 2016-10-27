@@ -162,7 +162,7 @@ void BTB_Update(BTB* BranchTargetBuffer, uint32_t addr, Result result, uint64_t 
 {
 	uint32_t tag, index, way_num;
 	/* if predition is correct */
-	if (result.actual_branch == result.predict_branch[result.predict_predictor])
+	if (result.actual_branch == result.predict_branch)
 	{
 		if (result.actual_branch == not_branch)
 			/* if it is not a branch and predition is correct, we do nothing */
@@ -187,4 +187,19 @@ void BTB_Update(BTB* BranchTargetBuffer, uint32_t addr, Result result, uint64_t 
 	}
 	Rank_Maintain(BranchTargetBuffer, index, way_num, rank_value);
 	BranchTargetBuffer->stat.num_updates++;
+}
+
+void BTB_fprintf(BTB* BranchTargetBuffer, FILE *fp)
+{
+	uint32_t i;
+	for (i = 0; i < BranchTargetBuffer->attributes.set_num; i++)
+	{
+		fprintf(fp, "Set\t\t%u: ", i);
+		uint32_t j;
+		for (j = 0; j < BranchTargetBuffer->attributes.assoc; j++)
+		{
+			fprintf(fp, "  {%u, 0x  %x}", BranchTargetBuffer->set[i].block[j].valid_bit, Rebuild_Address(BranchTargetBuffer, BranchTargetBuffer->set[i].block[j].tag, i));
+		}
+		fprintf(fp, "\n");
+	}
 }
