@@ -75,6 +75,7 @@ typedef struct Stat
 }Stat;
 
 extern Stat stat;
+extern char *trace_file;
 
 /*
  *	Parse the arguments to Predictor "type" and array "width"

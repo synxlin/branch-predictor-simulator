@@ -73,5 +73,5 @@ void BCT_fprintf(BCT* BranchChooserTable, FILE *fp)
 {
 	uint32_t i;
 	for (i = 0; i < BranchChooserTable->attributes.chooser_num; i++)
-		fprintf(fp, "choice table[%u]: %u\n", i, BranchChooserTable->chooser[i]);
+		fprintf(fp, "Choice table[%u]: %u\n", i, BranchChooserTable->chooser[i]);
 }

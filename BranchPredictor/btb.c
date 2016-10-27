@@ -143,14 +143,15 @@ void BTB_Update(uint32_t addr, Result result, uint64_t rank_value)
 
 void BTB_fprintf(FILE *fp)
 {
+	fprintf(fp, "Final BTB Tag Array Contents {valid, pc}:\n");
 	uint32_t i;
 	for (i = 0; i < branch_target_buffer->attributes.set_num; i++)
 	{
-		fprintf(fp, "Set\t\t%u: ", i);
+		fprintf(fp, "Set%6u: ", i);
 		uint32_t j;
 		for (j = 0; j < branch_target_buffer->attributes.assoc; j++)
 		{
-			fprintf(fp, "  {%u, 0x\t\t%x}", branch_target_buffer->set[i].block[j].valid_bit, Rebuild_Address(branch_target_buffer->set[i].block[j].tag, i));
+			fprintf(fp, "  {%u, 0x%8x}", branch_target_buffer->set[i].block[j].valid_bit, Rebuild_Address(branch_target_buffer->set[i].block[j].tag, i));
 		}
 		fprintf(fp, "\n");
 	}

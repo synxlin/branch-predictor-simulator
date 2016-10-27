@@ -129,7 +129,7 @@ Result Predictor_Predict(uint32_t addr)
 		result.predict_taken[BIMODAL] = Bimodal_Predict(predictor->bp_bimodal, addr);
 		result.predict_taken[GSHARE] = Gshare_Predict(predictor->bp_gshare, addr);
 		result.predict_predictor = BCT_Predict(predictor->branch_chooser_table, addr);
-		if (predictor == bimodal)
+		if (result.predict_predictor == bimodal)
 			result.predict_taken[HYBRID] = result.predict_taken[BIMODAL];
 		else
 			result.predict_taken[HYBRID] = result.predict_taken[GSHARE];
@@ -163,7 +163,6 @@ void Gshare_Update(BP_Gshare *predictor, uint32_t addr, Result result)
 	uint32_t index_head = (index >> (i - h)) ^ history;
 	index = ((index_head) << (i - h)) | index_tail;
 	BPT_Update(predictor->branch_prediction_table, index, result);
-	GHR_Update(predictor->global_history_register, result);
 }
 
 void Predictor_Update(uint32_t addr, Result result)
@@ -177,7 +176,9 @@ void Predictor_Update(uint32_t addr, Result result)
 	}
 	case gshare:
 	{
-		Gshare_Update((BP_Gshare *)branch_predictor->predictor, addr, result);
+		BP_Gshare *predictor = branch_predictor->predictor;
+		Gshare_Update(predictor, addr, result);
+		GHR_Update(predictor->global_history_register, result);
 		return;
 	}
 	case hybrid:
@@ -187,7 +188,9 @@ void Predictor_Update(uint32_t addr, Result result)
 			Bimodal_Update(predictor->bp_bimodal, addr, result);
 		else
 			Gshare_Update(predictor->bp_gshare, addr, result);
+		GHR_Update(predictor->bp_gshare->global_history_register, result);
 		BCT_Update(predictor->branch_chooser_table, addr, result);
+		return;
 	}
 	case yeh_patt:
 	{
@@ -232,7 +235,7 @@ void BP_fprintf(FILE *fp)
 		fprintf(fp, "Final GHR Contents: ");
 		GHR_fprintf(predictor->bp_gshare->global_history_register, fp);
 		fprintf(fp, "\n");
-		fprintf(fp, "Final Chooser Table Contents : ");
+		fprintf(fp, "Final Chooser Table Contents : \n");
 		BCT_fprintf(predictor->branch_chooser_table, fp);
 		return;
 	}
