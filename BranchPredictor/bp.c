@@ -6,10 +6,6 @@
 #include <stdlib.h>
 
 #include "utils.h"
-#include "bpt.h"
-#include "bht.h"
-#include "ghr.h"
-#include "bct.h"
 #include "bp.h"
 
 void Predictor_Init(Predictor name, uint32_t* width)

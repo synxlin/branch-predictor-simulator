@@ -3,6 +3,9 @@
  */
 #pragma once
 
+#ifndef BPT_H_
+#define BPT_H_
+
 #define STRONGLY_TAKEN 3
 #define WEAKLY_TAKEN 2
 #define WEAKLY_NOT_TAKEN 1
@@ -35,3 +38,5 @@ Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index);
 void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result);
 
 void BPT_fprintf(BPT* BranchPredictionTable, FILE *fp);
+
+#endif

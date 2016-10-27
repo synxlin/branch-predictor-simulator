@@ -2,6 +2,13 @@
  *	Branch Predictor - Bimodal
  */
 #pragma once
+#ifndef BP_H_
+#define BP_H_
+
+#include "bpt.h"
+#include "bht.h"
+#include "ghr.h"
+#include "bct.h"
 
 typedef BPT BP_Bimodal;
 
@@ -47,3 +54,5 @@ void Gshare_Update(BP_Gshare *predictor, uint32_t addr, Result result);
 void Predictor_Update(uint32_t addr, Result result);
 
 void BP_fprintf(FILE *fp);
+
+#endif

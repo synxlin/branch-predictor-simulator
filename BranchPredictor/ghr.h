@@ -3,6 +3,9 @@
  */
 #pragma once
 
+#ifndef GHR_H_
+#define GHR_H_
+
 typedef struct GHR_Attributes
 {
 	uint32_t history_width;
@@ -20,3 +23,5 @@ void GHR_Initial(GHR *GlobalBranchHistoryRegister, uint32_t history_width);
 void GHR_Update(GHR *GlobalBranchHistoryRegister, Result result);
 
 void GHR_fprintf(GHR *GlobalBranchHistoryRegister, FILE *fp);
+
+#endif

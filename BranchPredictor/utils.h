@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef UTILS_H_
+#define UTILS_H_
+
 #define UINT32_MAX 4294967295
 
 #define BIMODAL 0
@@ -75,8 +78,12 @@ extern Stat stat;
 
 void parse_arguments(int argc, char * argv[], Predictor *name, uint32_t* width);
 
+void Stat_Init();
+
 uint32_t Get_Index(uint32_t addr, uint32_t index_width);
 
 void Update_Stat(Result result);
 
 uint32_t Result_fprintf(FILE *fp, int argc, char* argv[]);
+
+#endif

@@ -3,6 +3,9 @@
  */
 #pragma once
 
+#ifndef BTB_H_
+#define BTB_H_
+
 typedef struct Block
 {
 	/* uint32_t* Target_Addr; */
@@ -51,3 +54,5 @@ Branch_Result BTB_Predict(uint32_t addr);
 void BTB_Update(uint32_t addr, Result result, uint64_t rank_value);
 
 void BTB_fprintf(FILE *fp);
+
+#endif

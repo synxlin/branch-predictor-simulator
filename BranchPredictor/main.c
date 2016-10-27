@@ -3,10 +3,6 @@
 #include <string.h>
 
 #include "utils.h"
-#include "bpt.h"
-#include "bht.h"
-#include "ghr.h"
-#include "bct.h"
 #include "btb.h"
 #include "bp.h"
 

@@ -83,17 +83,17 @@ void Update_Stat(Result result)
 	{
 	case bimodal:
 	{
-		if (result.actual_taken != result.predict_taken)
+		if (result.actual_taken != result.predict_taken[BIMODAL])
 			stat.num_misprediction[BIMODAL]++;
 	}
 	case gshare:
 	{
-		if (result.actual_taken != result.predict_taken)
+		if (result.actual_taken != result.predict_taken[GSHARE])
 			stat.num_misprediction[GSHARE]++;
 	}
 	case hybrid:
 	{
-		if (result.actual_taken != result.predict_taken)
+		if (result.actual_taken != result.predict_taken[HYBRID])
 		{
 			stat.num_misprediction[result.predict_predictor]++;
 			stat.num_misprediction[HYBRID]++;
@@ -101,7 +101,7 @@ void Update_Stat(Result result)
 	}
 	case yeh_patt:
 	{
-		if (result.actual_taken != result.predict_taken)
+		if (result.actual_taken != result.predict_taken[YEH_PATT])
 			stat.num_misprediction[YEH_PATT]++;
 	}
 	default:
@@ -121,10 +121,10 @@ uint32_t Result_fprintf(FILE *fp, int argc, char* argv[])
 	BP_fprintf(fp);
 	fprintf(fp, "\n");
 	fprintf(fp, "Final Branch Predictor Statistics:\n");
-	fprintf(fp, "a. Number of branches: %lu\n", stat.num_branches);
-	fprintf(fp, "b. Number of predictions from the branch predictor: %lu\n", stat.num_prediction);
-	fprintf(fp, "c. Number of mispredictions from the branch predictor: %lu\n", stat.num_misprediction[branch_predictor->predictor_name]);
-	fprintf(fp, "d. Number of mispredictions from the BTB: %lu\n", stat.num_misprediction[BTBuffer]);
+	fprintf(fp, "a. Number of branches: %llu\n", stat.num_branches);
+	fprintf(fp, "b. Number of predictions from the branch predictor: %llu\n", stat.num_prediction);
+	fprintf(fp, "c. Number of mispredictions from the branch predictor: %llu\n", stat.num_misprediction[branch_predictor->predictor_name]);
+	fprintf(fp, "d. Number of mispredictions from the BTB: %llu\n", stat.num_misprediction[BTBuffer]);
 	stat.num_misprediction[5] = stat.num_misprediction[branch_predictor->predictor_name] + stat.num_misprediction[BTBuffer];
 	stat.misprediction_rate = (double)stat.num_misprediction[5] / (double)stat.num_prediction * 100.0;
 	fprintf(fp, "e. Misprediction Rate:  %3.2f  percent\n", stat.misprediction_rate);
