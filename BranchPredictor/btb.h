@@ -43,22 +43,20 @@ typedef struct btb
 	btb_attributes BTB_ATTRIBUTES;
 }btb;
 
-extern btb* BranchTargetBuffer;
+void BTB_Initial(btb* BranchTargetBuffer, uint32_t assoc, uint32_t index_width);
 
-void BTB_Initial(uint32_t assoc, uint32_t index_width);
+void Interpret_Address(btb* BranchTargetBuffer, uint32_t ADDR, uint32_t *tag, uint32_t *index);
 
-void Interpret_Address(uint32_t ADDR, uint32_t *tag, uint32_t *index);
+uint32_t Rebuild_Address(btb* BranchTargetBuffer, uint32_t tag, uint32_t index);
 
-uint32_t Rebuild_Address(uint32_t tag, uint32_t index);
+uint32_t BTB_Search(btb* BranchTargetBuffer, uint64_t tag, uint32_t index);
 
-uint32_t BTB_Search(uint64_t tag, uint32_t index);
+void Rank_Maintain(btb* BranchTargetBuffer, uint32_t index, uint32_t way_num, uint64_t rank_value);
 
-void Rank_Maintain(uint32_t index, uint32_t way_num, uint64_t rank_value);
+uint32_t Rank_Top(btb* BranchTargetBuffer, uint32_t index);
 
-uint32_t Rank_Top(uint32_t index);
+void BTB_Replacement(btb* BranchTargetBuffer, uint32_t index, uint32_t way_num, uint32_t tag);
 
-void BTB_Replacement(uint32_t index, uint32_t way_num, uint32_t tag);
+uint8_t BTB_Lookup(btb* BranchTargetBuffer, uint32_t ADDR);
 
-uint8_t BTB_Lookup(uint32_t ADDR);
-
-void BTB_Update(uint32_t ADDR, uint8_t result, uint64_t rank_value);
+void BTB_Update(btb* BranchTargetBuffer, uint32_t ADDR, uint8_t result, uint64_t rank_value);
