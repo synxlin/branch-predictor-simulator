@@ -16,14 +16,6 @@ typedef struct Set
 	uint64_t *rank;
 }Set;
 
-typedef struct BTB_Stat
-{
-	uint64_t num_predictions;
-	uint64_t num_updates;
-	uint64_t num_predict_branch;
-	uint64_t num_mispredict_branch;
-}BTB_Stat;
-
 typedef struct BTB_Attributes
 {
 	uint32_t assoc;
@@ -36,23 +28,26 @@ typedef struct BTB
 {
 	Set *set;
 	BTB_Attributes attributes;
-	BTB_Stat stat;
 }BTB;
 
-void BTB_Initial(BTB* BranchTargetBuffer, uint32_t assoc, uint32_t index_width);
+extern BTB* branch_target_buffer;
 
-void Interpret_Address(BTB* BranchTargetBuffer, uint32_t addr, uint32_t *tag, uint32_t *index);
+void BTB_Init(uint32_t assoc, uint32_t index_width);
 
-uint32_t Rebuild_Address(BTB* BranchTargetBuffer, uint32_t tag, uint32_t index);
+void Interpret_Address(uint32_t addr, uint32_t *tag, uint32_t *index);
 
-uint32_t BTB_Search(BTB* BranchTargetBuffer, uint64_t tag, uint32_t index);
+uint32_t Rebuild_Address(uint32_t tag, uint32_t index);
 
-void Rank_Maintain(BTB* BranchTargetBuffer, uint32_t index, uint32_t way_num, uint64_t rank_value);
+uint32_t BTB_Search(uint64_t tag, uint32_t index);
 
-uint32_t Rank_Top(BTB* BranchTargetBuffer, uint32_t index);
+void Rank_Maintain(uint32_t index, uint32_t way_num, uint64_t rank_value);
 
-void BTB_Replacement(BTB* BranchTargetBuffer, uint32_t index, uint32_t way_num, uint32_t tag);
+uint32_t Rank_Top(uint32_t index);
 
-Branch_Result BTB_Predict(BTB* BranchTargetBuffer, uint32_t addr);
+void BTB_Replacement(uint32_t index, uint32_t way_num, uint32_t tag);
 
-void BTB_Update(BTB* BranchTargetBuffer, uint32_t addr, Result result, uint64_t rank_value);
+Branch_Result BTB_Predict(uint32_t addr);
+
+void BTB_Update(uint32_t addr, Result result, uint64_t rank_value);
+
+void BTB_fprintf(FILE *fp);

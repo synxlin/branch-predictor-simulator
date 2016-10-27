@@ -16,14 +16,6 @@ typedef enum Two_Bit_Counter
 	strongly_taken = STRONGLY_TAKEN
 } Two_Bit_Counter;
 
-typedef struct BPT_Stat
-{
-	uint64_t num_preditions;
-	uint64_t num_updates;
-	uint64_t num_predict_taken;
-	uint64_t num_mispredict_taken;
-}BPT_Stat;
-
 typedef struct BPT_Attributes
 {
 	uint64_t counter_num;
@@ -34,7 +26,6 @@ typedef struct BPT
 {
 	Two_Bit_Counter* counter;
 	BPT_Attributes attributes;
-	BPT_Stat stat;
 }BPT;
 
 void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width);

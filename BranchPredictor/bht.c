@@ -52,3 +52,10 @@ void BHT_Update(BHT *BranchHistoryTable, uint32_t addr, Result result)
 		old_history = old_history | BranchHistoryTable->attributes.history_one;
 	BranchHistoryTable->history[index] = old_history;
 }
+
+void BHT_fprintf(BHT *BranchHistoryTable, FILE *fp)
+{
+	uint32_t i;
+	for (i = 0; i < BranchHistoryTable->attributes.history_num; i++)
+		fprintf(fp, "history table[%u]: %u\n", i, BranchHistoryTable->history[i]);
+}

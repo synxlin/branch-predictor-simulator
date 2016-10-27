@@ -6,10 +6,11 @@
 #define GSHARE 1
 #define HYBRID 2
 #define YEH_PATT 3
-#define GHRegister 4
-#define BCTable 5
-#define BHTable 6
-#define BTBuffer 7
+#define BTBuffer 4
+#define GHRegister 5
+#define BCTable 6
+#define BHTable 7
+#define ASSOC 8
 
 #define NOT_BRANCH 0
 #define BRANCH 1
@@ -62,4 +63,20 @@ typedef struct Result
 	Taken_Result actual_taken;
 }Result;
 
+typedef struct Stat
+{
+	uint64_t num_branches;
+	uint64_t num_prediction;
+	uint64_t num_misprediction[6];
+	double misprediction_rate;
+}Stat;
+
+extern Stat stat;
+
+void parse_arguments(int argc, char * argv[], Predictor *name, uint32_t* width);
+
 uint32_t Get_Index(uint32_t addr, uint32_t index_width);
+
+void Update_Stat(Result result);
+
+uint32_t Result_fprintf(FILE *fp, int argc, char* argv[]);

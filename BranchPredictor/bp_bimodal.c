@@ -1,3 +1,0 @@
-/*
- *	Branch Predictor - Bimodal
- */

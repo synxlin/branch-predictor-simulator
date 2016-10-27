@@ -12,23 +12,28 @@
  /*
   *	Inital the global branch history table
   */
-void GHR_Initial(GHR *GlobalBranchHistoryTable, uint32_t history_width)
+void GHR_Initial(GHR *GlobalBranchHistoryRegister, uint32_t history_width)
 {
-	GlobalBranchHistoryTable->attributes.history_width = history_width;
-	GlobalBranchHistoryTable->attributes.history_one = (uint32_t)pow_2(history_width - 1);
-	GlobalBranchHistoryTable->history = 0;
+	GlobalBranchHistoryRegister->attributes.history_width = history_width;
+	GlobalBranchHistoryRegister->attributes.history_one = (uint32_t)pow_2(history_width - 1);
+	GlobalBranchHistoryRegister->history = 0;
 }
 
 /*
- *	Update the GlobalBranchHistoryTable
+ *	Update the GlobalBranchHistoryRegister
  *	input	:
  *		result	:	struct "Result", the prediction and actual result
  */
-void GHR_Update(GHR *GlobalBranchHistoryTable, Result result)
+void GHR_Update(GHR *GlobalBranchHistoryRegister, Result result)
 {
-	uint32_t old_history = GlobalBranchHistoryTable->history;
+	uint32_t old_history = GlobalBranchHistoryRegister->history;
 	old_history = old_history >> 1;
 	if (result.actual_taken == TAKEN)
-		old_history = old_history | GlobalBranchHistoryTable->attributes.history_one;
-	GlobalBranchHistoryTable->history = old_history;
+		old_history = old_history | GlobalBranchHistoryRegister->attributes.history_one;
+	GlobalBranchHistoryRegister->history = old_history;
+}
+
+void GHR_fprintf(GHR *GlobalBranchHistoryRegister, FILE *fp)
+{
+	fprintf("0x\t\t%x\n", GlobalBranchHistoryRegister->history);
 }

@@ -32,10 +32,10 @@ void BCT_Initial(BCT* BranchChooserTable, uint32_t index_width)
  *	return	:
  *		the prediction on which predictor is chosen
  */
-Predictor BCT_Predict(BCT* BranchChooseTable, uint32_t addr)
+Predictor BCT_Predict(BCT* BranchChooserTable, uint32_t addr)
 {
-	uint32_t index = Get_Index(addr, BranchChooseTable->attributes.index_width);
-	switch (BranchChooseTable->chooser[index])
+	uint32_t index = Get_Index(addr, BranchChooserTable->attributes.index_width);
+	switch (BranchChooserTable->chooser[index])
 	{
 	case strongly_gshare:
 	case weakly_gshare:
@@ -51,35 +51,43 @@ Predictor BCT_Predict(BCT* BranchChooseTable, uint32_t addr)
  *		addr	:	PC
  *		result	:	struct "Result", the prediction and actual result
  */
-void BCT_Update(BCT* BranchChooseTable, uint32_t addr, Result result)
+void BCT_Update(BCT* BranchChooserTable, uint32_t addr, Result result)
 {
 	if (result.actual_taken == result.predict_taken[BIMODAL] && result.actual_taken == result.predict_taken[GSHARE])
 		return;
 	if (result.actual_taken != result.predict_taken[BIMODAL] && result.actual_taken != result.predict_taken[GSHARE])
 		return;
-	uint32_t index = Get_Index(addr, BranchChooseTable->attributes.index_width);
+	uint32_t index = Get_Index(addr, BranchChooserTable->attributes.index_width);
 	if (result.actual_branch == result.predict_taken[GSHARE])
 	{
-		switch (BranchChooseTable->chooser[index])
+		switch (BranchChooserTable->chooser[index])
 		{
 		case strongly_bimodal:
 		case weakly_bimodal:
 		case weakly_gshare:
-			BranchChooseTable->chooser[index]++;
+			BranchChooserTable->chooser[index]++;
 		default:
 			return;
 		}
 	}
 	else
 	{
-		switch (BranchChooseTable->chooser[index])
+		switch (BranchChooserTable->chooser[index])
 		{
 		case strongly_gshare:
 		case weakly_gshare:
 		case weakly_bimodal:
-			BranchChooseTable->chooser[index]--;
+			BranchChooserTable->chooser[index]--;
 		default:
 			return;
 		}
 	}
+}
+
+
+void BCT_fprintf(BCT* BranchChooserTable, FILE *fp)
+{
+	uint32_t i;
+	for (i = 0; i < BranchChooserTable->attributes.chooser_num; i++)
+		fprintf(fp, "choice table[%u]: %u\n", i, BranchChooserTable->chooser[i]);
 }

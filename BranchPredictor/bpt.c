@@ -17,7 +17,6 @@ void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width)
 	BranchPredictionTable->attributes.index_width = index_width;
 	BranchPredictionTable->attributes.counter_num = (uint64_t)pow_2(index_width);
 
-	memset(&(BranchPredictionTable->stat), 0, sizeof(BPT_Stat));
 	BranchPredictionTable->counter = (Two_Bit_Counter *)malloc(sizeof(Two_Bit_Counter) * BranchPredictionTable->attributes.counter_num);
 	if (BranchPredictionTable->counter == NULL)
 		_error_exit("malloc")
@@ -35,12 +34,10 @@ void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width)
  */
 Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index)
 {
-	BranchPredictionTable->stat.num_preditions++;
 	switch (BranchPredictionTable->counter[index])
 	{
 	case strongly_taken:
 	case weakly_taken:
-		BranchPredictionTable->stat.num_predict_taken++;
 		return taken;
 	default:
 		return not_taken;
@@ -55,9 +52,6 @@ Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index)
  */
 void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result)
 {
-	if (result.actual_taken != result.predict_taken[result.predict_predictor])
-		BranchPredictionTable->stat.num_mispredict_taken++;
-
 	if (result.actual_taken == taken)
 	{
 		switch (BranchPredictionTable->counter[index])
@@ -65,7 +59,6 @@ void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result)
 		case strongly_not_taken:
 		case weakly_not_taken:
 		case weakly_taken:
-			BranchPredictionTable->stat.num_updates++;
 			BranchPredictionTable->counter[index]++;
 		default:
 			return;
@@ -78,7 +71,6 @@ void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result)
 		case strongly_taken:
 		case weakly_taken:
 		case weakly_not_taken:
-			BranchPredictionTable->stat.num_updates++;
 			BranchPredictionTable->counter[index]--;
 		default:
 			return;

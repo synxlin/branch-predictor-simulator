@@ -22,3 +22,5 @@ void BHT_Initial(BHT *BranchHistoryTable, uint32_t index_width, uint32_t history
 uint64_t BHT_Search(BHT *BranchHistoryTable, uint32_t addr);
 
 void BHT_Update(BHT *BranchHistoryTable, uint32_t addr, Result result);
+
+void BHT_fprintf(BHT *BranchHistoryTable, FILE *fp);

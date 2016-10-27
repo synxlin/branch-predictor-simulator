@@ -31,3 +31,19 @@ typedef struct BP
 }BP;
 
 extern BP* branch_predictor;
+
+void Predictor_Init(Predictor name, uint32_t* width);
+
+Taken_Result Bimodal_Predict(BP_Bimodal *predictor, uint32_t addr);
+
+Taken_Result Gshare_Predict(BP_Gshare *predictor, uint32_t addr);
+
+Result Predictor_Predict(uint32_t addr);
+
+void Bimodal_Update(BP_Bimodal *predictor, uint32_t addr, Result result);
+
+void Gshare_Update(BP_Gshare *predictor, uint32_t addr, Result result);
+
+void Predictor_Update(uint32_t addr, Result result);
+
+void BP_fprintf(FILE *fp);

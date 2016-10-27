@@ -15,7 +15,8 @@ typedef struct GHR
 	GHR_Attributes attributes;
 }GHR;
 
-void GHR_Initial(GHR *GlobalBranchHistoryTable, uint32_t history_width);
+void GHR_Initial(GHR *GlobalBranchHistoryRegister, uint32_t history_width);
 
-void GHR_Update(GHR *GlobalBranchHistoryTable, Result result);
+void GHR_Update(GHR *GlobalBranchHistoryRegister, Result result);
 
+void GHR_fprintf(GHR *GlobalBranchHistoryRegister, FILE *fp);

@@ -10,10 +10,9 @@
 #include "bht.h"
 #include "ghr.h"
 #include "bct.h"
-#include "btb.h"
 #include "bp.h"
 
-void Predictor_Init(Predictor name, uint32_t* width, uint32_t assoc)
+void Predictor_Init(Predictor name, uint32_t* width)
 {
 	branch_predictor->predictor_name = name;
 	switch (name)
@@ -143,7 +142,7 @@ void Gshare_Update(BP_Gshare *predictor, uint32_t addr, Result result)
 	GHR_Update(predictor->global_history_register, result);
 }
 
-void Predictor_Update(uint32_t addr, Result result, uint64_t rank_value)
+void Predictor_Update(uint32_t addr, Result result)
 {
 	switch (branch_predictor->predictor_name)
 	{
@@ -172,6 +171,57 @@ void Predictor_Update(uint32_t addr, Result result, uint64_t rank_value)
 		uint64_t history = BHT_Search(predictor->branch_histroy_table, addr);
 		BPT_Update(predictor->branch_predition_table, history, result);
 		BHT_Update(predictor->branch_histroy_table, addr, result);
+		return;
+	}
+	default:
+		return;
+	}
+}
+
+void BP_fprintf(FILE *fp)
+{
+	switch (branch_predictor->predictor_name)
+	{
+	case bimodal:
+	{
+		fprintf(fp, "Final Bimodal Table Contents: \n");
+		BPT_fprintf((BPT *)(branch_predictor->predictor), fp);
+		return;
+	}
+	case gshare:
+	{
+		BP_Gshare *predictor = branch_predictor->predictor;
+		fprintf(fp, "Final GShare Table Contents: \n");
+		BPT_fprintf(predictor->branch_prediction_table, fp);
+		fprintf(fp, "\n");
+		fprintf(fp, "Final GHR Contents: ");
+		GHR_fprintf(predictor->global_history_register, fp);
+		return;
+	}
+	case hybrid:
+	{
+		BP_Hybrid *predictor = branch_predictor->predictor;
+		fprintf(fp, "Final Bimodal Table Contents: \n");
+		BPT_fprintf((BPT *)predictor->bp_bimodal, fp);
+		fprintf(fp, "\n");
+		fprintf(fp, "Final GShare Table Contents: \n");
+		BPT_fprintf(predictor->bp_gshare->branch_prediction_table, fp);
+		fprintf(fp, "\n");
+		fprintf(fp, "Final GHR Contents: ");
+		GHR_fprintf(predictor->bp_gshare->global_history_register, fp);
+		fprintf(fp, "\n");
+		fprintf(fp, "Final Chooser Table Contents : ");
+		BCT_fprintf(predictor->branch_chooser_table, fp);
+		return;
+	}
+	case yeh_patt:
+	{
+		BP_Yeh_Patt *predictor = branch_predictor->predictor;
+		fprintf(fp, "Final History Table Contents: \n");
+		BHT_fprintf(predictor->branch_histroy_table, fp);
+		fprintf(fp, "\n");
+		fprintf(fp, "Final Bimodal Table Contents: \n");
+		BPT_fprintf(predictor->branch_predition_table, fp);
 		return;
 	}
 	default:

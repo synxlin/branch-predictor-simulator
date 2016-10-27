@@ -30,6 +30,8 @@ typedef struct BCT
 
 void BCT_Initial(BCT* BranchChooserTable, uint32_t index_width);
 
-Predictor BCT_Predict(BCT* BranchChooseTable, uint32_t addr);
+Predictor BCT_Predict(BCT* BranchChooserTable, uint32_t addr);
 
-void BCT_Update(BCT* BranchChooseTable, uint32_t addr, Result result);
+void BCT_Update(BCT* BranchChooserTable, uint32_t addr, Result result);
+
+void BCT_fprintf(BCT* BranchChooserTable, FILE *fp);
