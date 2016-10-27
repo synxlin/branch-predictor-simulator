@@ -8,14 +8,33 @@
 
 void parse_arguments(int argc, char * argv[], Predictor *name, uint32_t* width)
 {
+	if (argc < 5 || argc > 9 || argc == 7)
+		_output_error_exit("wrong number of input parameters")
+
 	if (strcmp(argv[1], "bimodal"))
+	{
 		*name = bimodal;
+		if (argc != 5)
+			_output_error_exit("wrong number of input parameters")
+	}
 	else if (strcmp(argv[1], "gshare"))
+	{
 		*name = gshare;
+		if (argc != 6)
+			_output_error_exit("wrong number of input parameters")
+	}
 	else if (strcmp(argv[1], "hybrid"))
+	{
 		*name = hybrid;
+		if (argc != 8)
+			_output_error_exit("wrong number of input parameters")
+	}
 	else if (strcmp(argv[1], "yehpatt"))
+	{
 		*name = yeh_patt;
+		if (argc != 6)
+			_output_error_exit("wrong number of input parameters")
+	}
 	else
 		_output_error_exit("invalid predictor type")
 
