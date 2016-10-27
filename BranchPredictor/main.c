@@ -10,7 +10,6 @@
 FILE *debug_fp;
 #endif
 
-
 BTB *branch_target_buffer;
 BP *branch_predictor;
 Stat stat;
@@ -23,13 +22,14 @@ int main(int argc, char * argv[])
 		_error_exit("fopen")
 #endif
 
-	Predictor name;
+	Predictor type;
 	uint32_t width[9];
 
 	branch_target_buffer = NULL;
 	branch_predictor = NULL;
 
-	parse_arguments(argc, argv, &name, width);
+	parse_arguments(argc, argv, &type, width);
+
 	if (width[BTBuffer] != 0 && width[ASSOC] != 0)
 	{
 		branch_target_buffer = (BTB *)malloc(sizeof(BTB));
@@ -41,7 +41,7 @@ int main(int argc, char * argv[])
 	branch_predictor = (BP *)malloc(sizeof(BP));
 	if (branch_predictor == NULL)
 		_error_exit("malloc")
-	Predictor_Init(name, width);
+	Predictor_Init(type, width);
 
 	Stat_Init();
 

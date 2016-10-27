@@ -6,39 +6,39 @@
 #include "btb.h"
 #include "bp.h"
 
-void parse_arguments(int argc, char * argv[], Predictor *name, uint32_t* width)
+void parse_arguments(int argc, char * argv[], Predictor *type, uint32_t* width)
 {
 	if (argc < 5 || argc > 9 || argc == 7)
 		_output_error_exit("wrong number of input parameters")
 
 	if (strcmp(argv[1], "bimodal"))
 	{
-		*name = bimodal;
+		*type = bimodal;
 		if (argc != 5)
 			_output_error_exit("wrong number of input parameters")
 	}
 	else if (strcmp(argv[1], "gshare"))
 	{
-		*name = gshare;
+		*type = gshare;
 		if (argc != 6)
 			_output_error_exit("wrong number of input parameters")
 	}
 	else if (strcmp(argv[1], "hybrid"))
 	{
-		*name = hybrid;
+		*type = hybrid;
 		if (argc != 8)
 			_output_error_exit("wrong number of input parameters")
 	}
 	else if (strcmp(argv[1], "yehpatt"))
 	{
-		*name = yeh_patt;
+		*type = yeh_patt;
 		if (argc != 6)
 			_output_error_exit("wrong number of input parameters")
 	}
 	else
 		_output_error_exit("invalid predictor type")
 
-	switch (*name)
+	switch (*type)
 	{
 	case bimodal:
 	{
@@ -96,19 +96,24 @@ void Update_Stat(Result result)
 	if (result.predict_branch != result.actual_branch)
 		stat.num_misprediction[BTBuffer]++;
 	if (result.predict_branch == NOT_BRANCH)
+	{
+		stat.num_misprediction[5] = stat.num_misprediction[branch_predictor->predictor_type] + stat.num_misprediction[BTBuffer];
+		stat.misprediction_rate = (double)stat.num_misprediction[5] / (double)stat.num_prediction * 100.0;
 		return;
-	stat.num_prediction++;
-	switch (branch_predictor->predictor_name)
+	}
+	switch (branch_predictor->predictor_type)
 	{
 	case bimodal:
 	{
 		if (result.actual_taken != result.predict_taken[BIMODAL])
 			stat.num_misprediction[BIMODAL]++;
+		break;
 	}
 	case gshare:
 	{
 		if (result.actual_taken != result.predict_taken[GSHARE])
 			stat.num_misprediction[GSHARE]++;
+		break;
 	}
 	case hybrid:
 	{
@@ -117,15 +122,21 @@ void Update_Stat(Result result)
 			stat.num_misprediction[result.predict_predictor]++;
 			stat.num_misprediction[HYBRID]++;
 		}
+		break;
 	}
 	case yeh_patt:
 	{
 		if (result.actual_taken != result.predict_taken[YEH_PATT])
 			stat.num_misprediction[YEH_PATT]++;
+		break;
 	}
 	default:
 		return;
 	}
+	if (result.predict_taken == taken)
+		stat.num_prediction++;
+	stat.num_misprediction[5] = stat.num_misprediction[branch_predictor->predictor_type] + stat.num_misprediction[BTBuffer];
+	stat.misprediction_rate = (double)stat.num_misprediction[5] / (double)stat.num_prediction * 100.0;
 }
 
 uint32_t Result_fprintf(FILE *fp, int argc, char* argv[])
@@ -142,9 +153,7 @@ uint32_t Result_fprintf(FILE *fp, int argc, char* argv[])
 	fprintf(fp, "Final Branch Predictor Statistics:\n");
 	fprintf(fp, "a. Number of branches: %llu\n", stat.num_branches);
 	fprintf(fp, "b. Number of predictions from the branch predictor: %llu\n", stat.num_prediction);
-	fprintf(fp, "c. Number of mispredictions from the branch predictor: %llu\n", stat.num_misprediction[branch_predictor->predictor_name]);
+	fprintf(fp, "c. Number of mispredictions from the branch predictor: %llu\n", stat.num_misprediction[branch_predictor->predictor_type]);
 	fprintf(fp, "d. Number of mispredictions from the BTB: %llu\n", stat.num_misprediction[BTBuffer]);
-	stat.num_misprediction[5] = stat.num_misprediction[branch_predictor->predictor_name] + stat.num_misprediction[BTBuffer];
-	stat.misprediction_rate = (double)stat.num_misprediction[5] / (double)stat.num_prediction * 100.0;
 	fprintf(fp, "e. Misprediction Rate:  %3.2f  percent\n", stat.misprediction_rate);
 }

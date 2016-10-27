@@ -1,5 +1,5 @@
 /*
- *	branch target buffer
+ *	Branch Target Buffer
  */
 
 #include <stdio.h>
@@ -8,9 +8,7 @@
 #include "utils.h"
 #include "btb.h"
 
- /*
-  *	Inital the branch target buffer
-  */
+
 void BTB_Init(uint32_t assoc, uint32_t index_width)
 {
 	/* first, initial the attributes of BTB */
@@ -38,9 +36,6 @@ void BTB_Init(uint32_t assoc, uint32_t index_width)
 	}
 }
 
-/*
- *	Interpreter the address into tag, index
- */
 void Interpret_Address(uint32_t addr, uint32_t *tag, uint32_t *index)
 {
 	uint32_t tag_width = branch_target_buffer->attributes.tag_width;
@@ -48,21 +43,14 @@ void Interpret_Address(uint32_t addr, uint32_t *tag, uint32_t *index)
 	*index = (addr << tag_width) >> (tag_width + 2);
 }
 
-/*
- *	Rebuild address from tag and index
- */
 uint32_t Rebuild_Address(uint32_t tag, uint32_t index)
 {
-	uint32_t ADDR = 0;
-	ADDR |= (tag << (branch_target_buffer->attributes.index_width + 2));
-	ADDR |= (index << 2);
-	return ADDR;
+	uint32_t addr = 0;
+	addr |= (tag << (branch_target_buffer->attributes.index_width + 2));
+	addr |= (index << 2);
+	return addr;
 }
 
-/*
- *	Search the branch_target_buffer
- *	return the way_num if HIT, otherwise, return the assoc
- */
 uint32_t BTB_Search(uint64_t tag, uint32_t index)
 {
 	uint32_t i, k = branch_target_buffer->attributes.assoc;
@@ -75,9 +63,6 @@ uint32_t BTB_Search(uint64_t tag, uint32_t index)
 	return k;
 }
 
-/*
- *	Maintain the rank array
- */
 void Rank_Maintain(uint32_t index, uint32_t way_num, uint64_t rank_value)
 {
 	branch_target_buffer->set[index].rank[way_num] = rank_value;
@@ -92,9 +77,6 @@ void Rank_Maintain(uint32_t index, uint32_t way_num, uint64_t rank_value)
 #endif
 }
 
-/*
- *	Return the way number to be placed or replaced
- */
 uint32_t Rank_Top(uint32_t index)
 {
 	uint32_t i, assoc = branch_target_buffer->attributes.assoc;
@@ -110,9 +92,6 @@ uint32_t Rank_Top(uint32_t index)
 	return k;
 }
 
-/*
- *	Allocate (Place or Replace) block "blk" on branch_target_buffer, set "index", way "way_num"
- */
 void BTB_Replacement(uint32_t index, uint32_t way_num, uint32_t tag)
 {
 	branch_target_buffer->set[index].block[way_num].valid_bit = VALID;
@@ -122,13 +101,6 @@ void BTB_Replacement(uint32_t index, uint32_t way_num, uint32_t tag)
 #endif
 }
 
-/*
- *	Search the branch_target_buffer for PC "addr" and make prediction
- *	input	:
- *		addr	:	PC
- *	return	:
- *		the prediction on whether inst is branch -- BRANCH or NOT_BRANCH
- */
 Branch_Result BTB_Predict(uint32_t addr)
 {
 	uint32_t tag, index;
@@ -139,13 +111,6 @@ Branch_Result BTB_Predict(uint32_t addr)
 	return branch;
 }
 
-/*
- *	Update the branch_target_buffer
- *	input	:
- *		addr		:	PC
- *		result		:	struct "Result", the prediction and actual result
- *		rank_value	:	the index of the instr
- */
 void BTB_Update(uint32_t addr, Result result, uint64_t rank_value)
 {
 	uint32_t tag, index, way_num;
@@ -168,7 +133,6 @@ void BTB_Update(uint32_t addr, Result result, uint64_t rank_value)
 		 * case where predition is not a branch but it actually is.
 		 * Under this situation, we need to replace block and update LRU bit.
 		 */
-		//branch_target_buffer->stat.num_mispredict_branch++;
 		Interpret_Address(branch_target_buffer, addr, &tag, &index);
 		way_num = Rank_Top(branch_target_buffer, index);
 		BTB_Replacement(branch_target_buffer, index, way_num, tag);

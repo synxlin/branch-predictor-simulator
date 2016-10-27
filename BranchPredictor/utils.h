@@ -9,10 +9,10 @@
 #define GSHARE 1
 #define HYBRID 2
 #define YEH_PATT 3
-#define BTBuffer 4
-#define GHRegister 5
-#define BCTable 6
-#define BHTable 7
+#define GHRegister 4
+#define BCTable 5
+#define BHTable 6
+#define BTBuffer 7
 #define ASSOC 8
 
 #define NOT_BRANCH 0
@@ -76,14 +76,40 @@ typedef struct Stat
 
 extern Stat stat;
 
-void parse_arguments(int argc, char * argv[], Predictor *name, uint32_t* width);
+/*
+ *	Parse the arguments to Predictor "type" and array "width"
+ *	input(output)	:
+ *		type	:	the type of predictor
+ *		width	:	the array of width
+ *					width[BIMODAL]		:	bimodal, hybrid		i_B
+ *					width[GSHARE]		:	gshare, hybrid		i_G
+ *					width[GHRegister]	:	gshare, hybrid		h
+ *					width[BCTable]		:	hybrid				i_C
+ *					width[BHTable]		:	yet_patt			h
+ *					width[YEH_PATT]		:	yet_patt			p
+ *					width[BTBuffer]		:	all					i_BTB
+ *					width[ASSOC]		:	all					assoc
+ */
+void parse_arguments(int argc, char * argv[], Predictor *type, uint32_t* width);
 
+/*
+ *	Initial the stat (global statistic data)
+ */
 void Stat_Init();
 
+/*
+ *	get index from "addr"
+ */
 uint32_t Get_Index(uint32_t addr, uint32_t index_width);
 
+/*
+ *	Update the stat according to result
+ */
 void Update_Stat(Result result);
 
+/*
+ *	Print the result to file *fp
+ */
 uint32_t Result_fprintf(FILE *fp, int argc, char* argv[]);
 
 #endif

@@ -9,9 +9,7 @@
 #include "utils.h"
 #include "bpt.h"
 
- /*
-  *	Inital the branch prediction table
-  */
+
 void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width)
 {
 	BranchPredictionTable->attributes.index_width = index_width;
@@ -25,13 +23,6 @@ void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width)
 		BranchPredictionTable->counter[i] = weakly_taken;
 }
 
-/*
- *	Search the BranchPredictionTable for entry of "index" and make prediction
- *	input	:
- *		index	:	index of counter
- *	return	:
- *		the prediction on whether branch is taken -- TAKEN or NOT_TAKEN
- */
 Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index)
 {
 	switch (BranchPredictionTable->counter[index])
@@ -44,12 +35,6 @@ Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index)
 	}
 }
 
-/*
- *	Update the BranchPredictionTable
- *	input	:
- *		index	:	index of counter
- *		result	:	struct "Result", the prediction and actual result
- */
 void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result)
 {
 	if (result.actual_taken == taken)

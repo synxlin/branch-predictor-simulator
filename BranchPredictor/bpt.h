@@ -31,12 +31,36 @@ typedef struct BPT
 	BPT_Attributes attributes;
 }BPT;
 
+/*
+ *	Initial the branch prediction table
+ *	input	:
+ *		index_width	:	the width of index
+ *						bimodal:	i_B		gshare:	i_G
+ *						hybrid:		(bimodal) i_B	(gshare) i_G
+ *						yehpatt:	p
+ */
 void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width);
 
+/*
+ *	Search the BranchPredictionTable for entry of "index" and make prediction
+ *	input	:
+ *		index	:	index of counter
+ *	return	:
+ *		the prediction on whether branch is taken -- taken or not_taken
+ */
 Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index);
 
+/*
+ *	Update the BranchPredictionTable
+ *	input	:
+ *		index	:	index of counter
+ *		result	:	struct "Result", the prediction and actual result
+ */
 void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result);
 
+/*
+ * Print the content of BranchPredictionTable to file *fp
+ */
 void BPT_fprintf(BPT* BranchPredictionTable, FILE *fp);
 
 #endif

@@ -9,9 +9,7 @@
 #include "utils.h"
 #include "bct.h"
 
- /*
-  *	Inital the branch chooser table
-  */
+
 void BCT_Initial(BCT* BranchChooserTable, uint32_t index_width)
 {
 	BranchChooserTable->attributes.index_width = index_width;
@@ -25,13 +23,6 @@ void BCT_Initial(BCT* BranchChooserTable, uint32_t index_width)
 		BranchChooserTable->chooser[i] = weakly_bimodal;
 }
 
-/*
- *	Search the BranchChooserTable for PC "addr" and make prediction
- *	input	:
- *		addr	:	PC
- *	return	:
- *		the prediction on which predictor is chosen
- */
 Predictor BCT_Predict(BCT* BranchChooserTable, uint32_t addr)
 {
 	uint32_t index = Get_Index(addr, BranchChooserTable->attributes.index_width);
@@ -45,12 +36,6 @@ Predictor BCT_Predict(BCT* BranchChooserTable, uint32_t addr)
 	}
 }
 
-/*
- *	Update the BranchChooserTable
- *	input	:
- *		addr	:	PC
- *		result	:	struct "Result", the prediction and actual result
- */
 void BCT_Update(BCT* BranchChooserTable, uint32_t addr, Result result)
 {
 	if (result.actual_taken == result.predict_taken[BIMODAL] && result.actual_taken == result.predict_taken[GSHARE])
@@ -83,7 +68,6 @@ void BCT_Update(BCT* BranchChooserTable, uint32_t addr, Result result)
 		}
 	}
 }
-
 
 void BCT_fprintf(BCT* BranchChooserTable, FILE *fp)
 {

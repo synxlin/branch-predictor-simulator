@@ -31,12 +31,34 @@ typedef struct BCT
 	BCT_Attributes attributes;
 }BCT;
 
+/*
+ *	Inital the branch chooser table
+ *	input	:
+ *		index_width	:	the width of index in PC addr to index the branch choose table
+ *						(hybrid) i_C
+ */
 void BCT_Initial(BCT* BranchChooserTable, uint32_t index_width);
 
+/*
+ *	Search the BranchChooserTable for PC "addr" and make prediction
+ *	input	:
+ *		addr	:	PC
+ *	return	:
+ *		the prediction on which predictor is chosen
+ */
 Predictor BCT_Predict(BCT* BranchChooserTable, uint32_t addr);
 
+/*
+ *	Update the BranchChooserTable
+ *	input	:
+ *		addr	:	PC
+ *		result	:	struct "Result", the prediction and actual result
+ */
 void BCT_Update(BCT* BranchChooserTable, uint32_t addr, Result result);
 
+/*
+ * Print the content of BranchChooserTable to file *fp
+ */
 void BCT_fprintf(BCT* BranchChooserTable, FILE *fp);
 
 #endif

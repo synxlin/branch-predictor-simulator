@@ -9,21 +9,16 @@
 #include "ghr.h"
 
 
- /*
-  *	Inital the global branch history table
-  */
 void GHR_Initial(GHR *GlobalBranchHistoryRegister, uint32_t history_width)
 {
 	GlobalBranchHistoryRegister->attributes.history_width = history_width;
-	GlobalBranchHistoryRegister->attributes.history_one = (uint32_t)pow_2(history_width - 1);
+	if (history_width == 0)
+		GlobalBranchHistoryRegister->attributes.history_one = 0;
+	else
+		GlobalBranchHistoryRegister->attributes.history_one = (uint32_t)pow_2(history_width - 1);
 	GlobalBranchHistoryRegister->history = 0;
 }
 
-/*
- *	Update the GlobalBranchHistoryRegister
- *	input	:
- *		result	:	struct "Result", the prediction and actual result
- */
 void GHR_Update(GHR *GlobalBranchHistoryRegister, Result result)
 {
 	uint32_t old_history = GlobalBranchHistoryRegister->history;
