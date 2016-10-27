@@ -21,7 +21,7 @@
 
 #define _output_error_exit(fun) { printf(fun); exit(EXIT_FAILURE);}
 
-#define pow_2(num) ((uint32_t)(1 << ((int)num)))
+#define pow_2(num) (1 << ((int)(num)))
 
 typedef char uint8_t;
 typedef unsigned int uint32_t;

@@ -20,7 +20,7 @@ typedef struct BPT_Stat
 
 typedef struct BPT_Attributes
 {
-	uint32_t counter_num;
+	uint64_t counter_num;
 	uint32_t index_width;
 }BPT_Attributes;
 
@@ -33,6 +33,6 @@ typedef struct BPT
 
 void BPT_Initial(BPT* BranchPredictionTable, uint32_t index_width);
 
-Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint32_t addr);
+Taken_Result BPT_Predict(BPT* BranchPredictionTable, uint64_t index);
 
-void BPT_Update(BPT* BranchPredictionTable, uint32_t addr, Result result);
+void BPT_Update(BPT* BranchPredictionTable, uint64_t index, Result result);

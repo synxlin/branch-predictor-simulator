@@ -15,7 +15,7 @@ void BTB_Initial(BTB* BranchTargetBuffer, uint32_t assoc, uint32_t index_width)
 {
 	/* first, initial the attributes of BTB */
 	BranchTargetBuffer->attributes.assoc = assoc;
-	BranchTargetBuffer->attributes.set_num = pow_2(index_width);
+	BranchTargetBuffer->attributes.set_num = (uint32_t)pow_2(index_width);
 	
 	BranchTargetBuffer->attributes.index_width = index_width;
 	BranchTargetBuffer->attributes.tag_width = 30 - index_width;
@@ -134,7 +134,7 @@ void BTB_Replacement(BTB* BranchTargetBuffer, uint32_t index, uint32_t way_num, 
 }
 
 /*
- *	Lookup the BranchTargetBuffer for PC "addr" and make prediction
+ *	Search the BranchTargetBuffer for PC "addr" and make prediction
  *	input	:
  *		addr	:	PC
  *	return	:
