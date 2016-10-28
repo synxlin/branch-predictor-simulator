@@ -16,7 +16,7 @@ To run the program,
 
 1. Bimodal predictor:
 
-> sim_bp bimodal <i_B\> <i_BTB\> <assoc_BTB\> <tracefile\>
+> sim_bp bimodal \< i_B \> < i_BTB \> < assoc_BTB \> < tracefile \>
 
 >> <i_B\> is the number of PC bits used to index the bimodal table, the rest are obvious.
 
