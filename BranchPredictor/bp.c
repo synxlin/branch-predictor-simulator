@@ -245,7 +245,7 @@ void BP_fprintf(FILE *fp)
 		fprintf(fp, "Final History Table Contents: \n");
 		BHT_fprintf(predictor->branch_histroy_table, fp);
 		fprintf(fp, "\n");
-		fprintf(fp, "Final Bimodal Table Contents: \n");
+		fprintf(fp, "Final Prediction Table Contents: \n");
 		BPT_fprintf(predictor->branch_predition_table, fp);
 		return;
 	}

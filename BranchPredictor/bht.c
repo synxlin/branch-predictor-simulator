@@ -43,5 +43,5 @@ void BHT_fprintf(BHT *BranchHistoryTable, FILE *fp)
 {
 	uint32_t i;
 	for (i = 0; i < BranchHistoryTable->attributes.history_num; i++)
-		fprintf(fp, "history table[%u]: %llu\n", i, BranchHistoryTable->history[i]);
+		fprintf(fp, "table[%u]: 0x %llx\n", i, BranchHistoryTable->history[i]);
 }
