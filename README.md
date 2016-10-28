@@ -14,35 +14,35 @@ To complie the program,
 
 To run the program,
 
-* Bimodal predictor:
+1. Bimodal predictor:
 
-> sim_bp bimodal <i B > <i BTB > <assoc BTB > <tracefile>
+> sim_bp bimodal <i_B\> <i_BTB\> <assoc_BTB\> <tracefile\>
 
->> <i B > is the number of PC bits used to index the bimodal table, the rest are obvious.
+>> <i_B\> is the number of PC bits used to index the bimodal table, the rest are obvious.
 
->> <i BTB > is the number of PC bits used to index the BTB.
+>> <i_BTB\> is the number of PC bits used to index the BTB.
 
->> <assoc BTB > is the BTB associativity.
+>> <assoc_BTB\> is the BTB associativity.
 
->> Setting either <i BTB > or <assoc BTB > to 0 implies that there is no BTB.
+>> Setting either <i_BTB \> or <assoc_BTB\> to 0 implies that there is no BTB.
 
-* Gshare predictor: 
+2. Gshare predictor: 
 
-> sim_bp gshare <i G > <h> <i BTB > <assoc BTB > <tracefile>
+> sim_bp gshare <i_G\> <h\> <i_BTB\> <assoc_BTB\> <tracefile\>
 
->> <i G > and <h> are the number of PC and GHR bits used to index the gshare table, respectively. 
+>> <i_G\> and <h\> are the number of PC and GHR bits used to index the gshare table, respectively. 
 
 >> The other parameters are identical to the bimodal case.  
 
-* Hydbrid predictor:  
+3. Hydbrid predictor:  
 
-> sim_bp hybrid <i C > <i G > <h> <i B > <i BTB > <assoc BTB > <tracefile>
->> <i C > is the number of PC bits used to index the chooser table. The other parameters are same as in the bimodal and gshare cases. 
+> sim_bp hybrid <i_C\> <i_G\> <h> <i_B\> <i_BTB\> <assoc_BTB\> <tracefile\>
+>> <i_C\> is the number of PC bits used to index the chooser table. The other parameters are same as in the bimodal and gshare cases. 
 
-* YehPatt predictor:
+4. YehPatt predictor:
 
-> sim_bp yehpatt <h> <p> <i BTB > <assoc BTB > <tracefile>
->> <h> and <p> are the number of PC and local history register bits used to index the history table and pattern table, respectively. The other parameters are identical to the bimodal case.
+> sim_bp yehpatt <h\> <p\> <i_BTB\> <assoc_BTB\> <tracefile\>
+>> <h\> and <p\> are the number of PC and local history register bits used to index the history table and pattern table, respectively. The other parameters are identical to the bimodal case.
 
 ### Output
 
@@ -69,9 +69,9 @@ The output of program includes
 ### Trace File
 The simulator reads a trace file in the following format: 
 
-branch PC in hex t|n
+< branch PC in hex \> t|n
 
-branch PC in hex t|n
+< branch PC in hex \> t|n
 
 ...
 
