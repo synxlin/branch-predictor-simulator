@@ -1,6 +1,6 @@
 # Project 2 - Branch Predictor Simulator
 
-## Introductino
+## Introduction
 
 This is a branch predictor simulator.
 
