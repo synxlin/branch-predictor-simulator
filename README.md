@@ -1,4 +1,4 @@
-# Project 2 - Branch Predictor Simulator
+# Branch Predictor Simulator
 
 ## Introduction
 
