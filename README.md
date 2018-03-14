@@ -1,4 +1,7 @@
-# Branch Predictor Simulator
+Branch Predictor Simulator
+==========================
+
+(Latest update: 2016/11/30)
 
 ## Introduction
 
