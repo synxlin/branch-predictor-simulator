@@ -101,7 +101,8 @@ Taken_Result Gshare_Predict(BP_Gshare *predictor, uint32_t addr)
 	uint32_t i = predictor->branch_prediction_table->attributes.index_width;
 	uint32_t index = Get_Index(addr, i);
 	uint32_t history = predictor->global_history_register->history;
-	uint32_t index_tail = (index << (32 - (i - h))) >> (32 - (i - h));
+        uint32_t mask = (1 <<((i-h)))-1;
+        uint32_t index_tail = index & mask;
 	uint32_t index_head = (index >> (i - h)) ^ history;
 	index = ((index_head) << (i - h)) | index_tail;
 	return BPT_Predict(predictor->branch_prediction_table, index);
@@ -159,7 +160,8 @@ void Gshare_Update(BP_Gshare *predictor, uint32_t addr, Result result)
 	uint32_t i = predictor->branch_prediction_table->attributes.index_width;
 	uint32_t index = Get_Index(addr, i);
 	uint32_t history = predictor->global_history_register->history;
-	uint32_t index_tail = (index << (32 - (i - h))) >> (32 - (i - h));
+        uint32_t mask = (1 <<((i-h)))-1;
+        uint32_t index_tail = index & mask;
 	uint32_t index_head = (index >> (i - h)) ^ history;
 	index = ((index_head) << (i - h)) | index_tail;
 	BPT_Update(predictor->branch_prediction_table, index, result);
