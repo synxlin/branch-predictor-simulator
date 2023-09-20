@@ -17,7 +17,7 @@ char *trace_file;
 
 int main(int argc, char *argv[])
 {
-  uint8_t two_byte_inst = 1;
+  uint8_t two_byte_inst;
 #ifdef DBG
 	debug_fp = fopen("debug.txt", "w");
 	if (debug_fp == NULL)
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 
 	Predictor type;
 	uint32_t width[9];
-	parse_arguments(argc, argv, &type, width);
+	parse_arguments(argc, argv, &type, width, &two_byte_inst);
 
 	branch_target_buffer = NULL;
 	branch_predictor = NULL;

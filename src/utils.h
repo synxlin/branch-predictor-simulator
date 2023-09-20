@@ -91,7 +91,7 @@ extern char *trace_file;
  *					width[BTBuffer]		:	all					i_BTB
  *					width[ASSOC]		:	all					assoc
  */
-void parse_arguments(int argc, char * argv[], Predictor *type, uint32_t* width);
+void parse_arguments(int argc, char * argv[], Predictor *type, uint32_t* width, uint8_t *two_byte_inst);
 
 /*
  *	Initial the stat (global statistic data)
