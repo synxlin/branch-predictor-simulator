@@ -101,7 +101,7 @@ void Stat_Init();
 /*
  *	get index from "addr"
  */
-uint32_t Get_Index(uint32_t addr, uint32_t index_width);
+uint32_t Get_Index(uint32_t addr, uint32_t index_width, uint8_t two_byte_inst);
 
 /*
  *	Update the stat according to result

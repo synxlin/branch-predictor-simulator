@@ -17,6 +17,7 @@ char *trace_file;
 
 int main(int argc, char *argv[])
 {
+  uint8_t two_byte_inst = 1;
 #ifdef DBG
 	debug_fp = fopen("debug.txt", "w");
 	if (debug_fp == NULL)
@@ -65,7 +66,7 @@ int main(int argc, char *argv[])
 			break;
 
 		/* make branch prediction */
-		Result result = Predictor_Predict(addr);
+		Result result = Predictor_Predict(addr, two_byte_inst);
 		if (branch_target_buffer == NULL)
 			result.predict_branch = branch;
 		else
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
 		/* update the predictor and statistic data */
 		Update_Stat(result);
 		if (result.predict_branch == branch)
-			Predictor_Update(addr, result);
+                	Predictor_Update(addr, two_byte_inst, result);
 		if (branch_target_buffer != NULL)
 			BTB_Update(addr, result, trace_count);
 

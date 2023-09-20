@@ -88,8 +88,14 @@ void Stat_Init()
 	memset(stat.num_misprediction, 0, sizeof(uint64_t) * 6);
 }
 
-uint32_t Get_Index(uint32_t addr, uint32_t index_width)
+uint32_t Get_Index(uint32_t addr, uint32_t index_width, uint8_t two_byte_inst)
 {
+	if(two_byte_inst)
+	{
+        	uint32_t lsb;
+	        lsb = (addr & 2) << index_width;
+		addr = addr ^ lsb;
+	}
 	return (addr << (30 - index_width)) >> (32 - index_width);
 }
 
