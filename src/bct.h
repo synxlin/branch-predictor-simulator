@@ -43,18 +43,20 @@ void BCT_Initial(BCT* BranchChooserTable, uint32_t index_width);
  *	Search the BranchChooserTable for PC "addr" and make prediction
  *	input	:
  *		addr	:	PC
+ *		two_byte_instr: Are instructions a mix of 4 and 2 byte length. Modifies index function.
  *	return	:
  *		the prediction on which predictor is chosen
  */
-Predictor BCT_Predict(BCT* BranchChooserTable, uint32_t addr);
+Predictor BCT_Predict(BCT* BranchChooserTable, uint32_t addr, uint8_t two_byte_inst);
 
 /*
  *	Update the BranchChooserTable
  *	input	:
  *		addr	:	PC
+ *		two_byte_instr: Are instructions a mix of 4 and 2 byte length. Modifies index function.
  *		result	:	struct "Result", the prediction and actual result
  */
-void BCT_Update(BCT* BranchChooserTable, uint32_t addr, Result result);
+void BCT_Update(BCT* BranchChooserTable, uint32_t addr, uint8_t two_byte_inst, Result result);
 
 /*
  * Print the content of BranchChooserTable to file *fp

@@ -58,32 +58,32 @@ void Predictor_Init(Predictor name, uint32_t* width);
 /*
  *	Prediction on taken_or_not of bimodal predictor
  */
-Taken_Result Bimodal_Predict(BP_Bimodal *predictor, uint32_t addr);
+Taken_Result Bimodal_Predict(BP_Bimodal *predictor, uint32_t addr, uint8_t two_byte_inst);
 
 /*
  *	Prediction on taken_or_not of gshare predictor
  */
-Taken_Result Gshare_Predict(BP_Gshare *predictor, uint32_t addr);
+Taken_Result Gshare_Predict(BP_Gshare *predictor, uint32_t addr, uint8_t two_byte_inst);
 
 /*
  *	Prediction of bimodal predictor
  */
-Result Predictor_Predict(uint32_t addr);
+Result Predictor_Predict(uint32_t addr, uint8_t two_byte_inst);
 
 /*
  *	Update bimodal prediction table
  */
-void Bimodal_Update(BP_Bimodal *predictor, uint32_t addr, Result result);
+void Bimodal_Update(BP_Bimodal *predictor, uint32_t addr, uint8_t two_byte_inst, Result result);
 
 /*
  *	Update gshare prediction table
  */
-void Gshare_Update(BP_Gshare *predictor, uint32_t addr, Result result);
+void Gshare_Update(BP_Gshare *predictor, uint32_t addr, uint8_t two_byte_inst, Result result);
 
 /*
  *	Update predictior
  */
-void Predictor_Update(uint32_t addr, Result result);
+void Predictor_Update(uint32_t addr, uint8_t two_byte_inst, Result result);
 
 /*
  *	Print the content of branch_predictor to file *fp

@@ -22,16 +22,16 @@ void BHT_Initial(BHT *BranchHistoryTable, uint32_t index_width, uint32_t history
 	memset(BranchHistoryTable->history, 0, sizeof(uint64_t) * BranchHistoryTable->attributes.history_num);
 }
 
-uint64_t BHT_Search(BHT *BranchHistoryTable, uint32_t addr)
+uint64_t BHT_Search(BHT *BranchHistoryTable, uint32_t addr, uint8_t two_byte_inst)
 {
-	uint32_t index = Get_Index(addr, BranchHistoryTable->attributes.index_width);
+	uint32_t index = Get_Index(addr, BranchHistoryTable->attributes.index_width, two_byte_inst);
 	return BranchHistoryTable->history[index];
 }
 
 
-void BHT_Update(BHT *BranchHistoryTable, uint32_t addr, Result result)
+void BHT_Update(BHT *BranchHistoryTable, uint32_t addr, uint8_t two_byte_inst, Result result)
 {
-	uint32_t index = Get_Index(addr, BranchHistoryTable->attributes.index_width);
+	uint32_t index = Get_Index(addr, BranchHistoryTable->attributes.index_width, two_byte_inst);
 	uint64_t old_history = BranchHistoryTable->history[index];
 	old_history = old_history >> 1;
 	if (result.actual_taken == TAKEN)
