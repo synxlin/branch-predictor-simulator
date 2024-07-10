@@ -17,6 +17,7 @@ char *trace_file;
 
 int main(int argc, char *argv[])
 {
+  uint8_t two_byte_inst;
 #ifdef DBG
 	debug_fp = fopen("debug.txt", "w");
 	if (debug_fp == NULL)
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
 
 	Predictor type;
 	uint32_t width[9];
-	parse_arguments(argc, argv, &type, width);
+	parse_arguments(argc, argv, &type, width, &two_byte_inst);
 
 	branch_target_buffer = NULL;
 	branch_predictor = NULL;
@@ -59,31 +60,42 @@ int main(int argc, char *argv[])
 		/* read the trace */
 		uint8_t take_or_not, line;
 		uint32_t addr;
-		int rr = fscanf(trace_file_fp, "%x %c%c", &addr, &take_or_not, &line);
+		char buf[256];
+		char * rr = fgets(buf, 256, trace_file_fp);
 		trace_count++;
-		if (rr == EOF)
+		if (rr == NULL)
 			break;
 
-		/* make branch prediction */
-		Result result = Predictor_Predict(addr);
-		if (branch_target_buffer == NULL)
-			result.predict_branch = branch;
+                // check for the begining of the branch trace.  Remove results from stats
+                // as the earlier section as bp training.
+		if(!strncmp(buf, "BEGIN", 5)) {
+                  printf("Reset stats\n");
+                  Stat_Init();
+		}
 		else
-			result.predict_branch = BTB_Predict(addr);
+		{
+                	sscanf(buf, "%x %c%c", &addr, &take_or_not, &line);
 
-		result.actual_branch = branch;
-		if (take_or_not == 't')
-			result.actual_taken = taken;
-		else
-			result.actual_taken = not_taken;
+			/* make branch prediction */
+			Result result = Predictor_Predict(addr, two_byte_inst);
+			if (branch_target_buffer == NULL)
+				result.predict_branch = branch;
+			else
+				result.predict_branch = BTB_Predict(addr);
 
-		/* update the predictor and statistic data */
-		Update_Stat(result);
-		if (result.predict_branch == branch)
-			Predictor_Update(addr, result);
-		if (branch_target_buffer != NULL)
-			BTB_Update(addr, result, trace_count);
+			result.actual_branch = branch;
+			if (take_or_not == 't')
+				result.actual_taken = taken;
+			else
+				result.actual_taken = not_taken;
 
+			/* update the predictor and statistic data */
+			Update_Stat(result);
+			if (result.predict_branch == branch)
+                		Predictor_Update(addr, two_byte_inst, result);
+			if (branch_target_buffer != NULL)
+				BTB_Update(addr, result, trace_count);
+		}
 	}
 
 	FILE *fp = stdout;

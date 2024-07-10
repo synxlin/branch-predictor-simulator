@@ -91,7 +91,7 @@ extern char *trace_file;
  *					width[BTBuffer]		:	all					i_BTB
  *					width[ASSOC]		:	all					assoc
  */
-void parse_arguments(int argc, char * argv[], Predictor *type, uint32_t* width);
+void parse_arguments(int argc, char * argv[], Predictor *type, uint32_t* width, uint8_t *two_byte_inst);
 
 /*
  *	Initial the stat (global statistic data)
@@ -101,7 +101,7 @@ void Stat_Init();
 /*
  *	get index from "addr"
  */
-uint32_t Get_Index(uint32_t addr, uint32_t index_width);
+uint32_t Get_Index(uint32_t addr, uint32_t index_width, uint8_t two_byte_inst);
 
 /*
  *	Update the stat according to result
